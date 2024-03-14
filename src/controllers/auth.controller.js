@@ -1,12 +1,12 @@
 const jwt = require('jsonwebtoken');
 const model = require('../models')
 const argon2 = require('argon2');
-const {errorHandler} = require('../util');
+const {errorHandler, withTransaction} = require('../util');
 const {HttpError} = require('../error');
 
 
-const signUp = errorHandler(
-  async (req, res) => {
+const signUp = errorHandler(withTransaction(
+  async (req, res, session) => {
 
     // Create a user document
     const userDoc = model.User({
@@ -18,17 +18,21 @@ const signUp = errorHandler(
       user: userDoc.id
     })
 
-    // throw new HttpError(400, 'Invalid username or password');
-    //for testing only
+
   
     // Save the user and refresh token to the database
-    await userDoc.save()
-    await refreshTokenDoc.save()
+    await userDoc.save({session})
+    await refreshTokenDoc.save({session})
   
     // Create access token and refresh token
     const accessToken = createAccessToken(userDoc.id)
     const refreshToken = createRefreshToken(userDoc.id, refreshTokenDoc.id)
   
+
+    // throw new HttpError(400, 'Invalid username or password');
+   //for testing only
+   //confirms incase of any error thrown, the transaction will be rolled back
+
     // Send the access token and refresh token to the client
     return {
         id: userDoc.id,
@@ -42,7 +46,9 @@ const signUp = errorHandler(
     // })
   
   }
-)
+))
+
+
 
 function createAccessToken (userId) {
   return jwt.sign({

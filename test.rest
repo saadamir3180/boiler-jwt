@@ -2,6 +2,6 @@ POST http://localhost:3000/api/auth/signup
 content-type: application/json
 
 {
-    "username": "tsc",
-    "password": "heeloo123"
+    "username": "SAAD Amir",
+    "password": "123saad"
 }
