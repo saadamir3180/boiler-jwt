@@ -16,6 +16,11 @@ async function StartServer() {
 
     app.use('/api', routes);
 
+    app.use((err, _, res, __) => {
+        logger.error(err.stack);
+        res.status(err.statusCode || 500)
+        .send({ error: err.message });
+    });
 
     app.listen(port, () => {
         logger.info(`Server running on http://localhost:${port}`);

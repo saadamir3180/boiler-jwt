@@ -1,7 +1,16 @@
 function errorHandler(aFunction) {
-  try {
-    aFunction();
-  } catch (error) {
-    console.error(error);
+  return async function (req, res, next) {
+    try {
+      const result = await aFunction(req, res);
+      res.json(result);
+    }
+    catch (error) {
+      next(error);
+    }
   }
+
 }
+
+module.exports = {
+  errorHandler
+};

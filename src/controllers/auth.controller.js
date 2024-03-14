@@ -1,35 +1,48 @@
 const jwt = require('jsonwebtoken');
 const model = require('../models')
 const argon2 = require('argon2');
+const {errorHandler} = require('../util');
+const {HttpError} = require('../error');
 
-async function signUp (req, res) {
 
-  // Create a user document
-  const userDoc = model.User({
-    username: req.body.username,
-    password: await argon2.hash(req.body.password)
-  })
-  // Create a refresh token document
-  const refreshTokenDoc = model.RefreshToken({
-    user: userDoc.id
-  })
+const signUp = errorHandler(
+  async (req, res) => {
 
-  // Save the user and refresh token to the database
-  await userDoc.save()
-  await refreshTokenDoc.save()
+    // Create a user document
+    const userDoc = model.User({
+      username: req.body.username,
+      password: await argon2.hash(req.body.password)
+    })
+    // Create a refresh token document
+    const refreshTokenDoc = model.RefreshToken({
+      user: userDoc.id
+    })
 
-  // Create access token and refresh token
-  const accessToken = createAccessToken(userDoc.id)
-  const refreshToken = createRefreshToken(userDoc.id, refreshTokenDoc.id)
-
-  // Send the access token and refresh token to the client
-  res.json({
-    id: userDoc.id,
-    accessToken,
-    refreshToken
-  })
-
-}
+    // throw new HttpError(400, 'Invalid username or password');
+    //for testing only
+  
+    // Save the user and refresh token to the database
+    await userDoc.save()
+    await refreshTokenDoc.save()
+  
+    // Create access token and refresh token
+    const accessToken = createAccessToken(userDoc.id)
+    const refreshToken = createRefreshToken(userDoc.id, refreshTokenDoc.id)
+  
+    // Send the access token and refresh token to the client
+    return {
+        id: userDoc.id,
+        accessToken,
+        refreshToken
+      }
+    // res.json({
+    //   id: userDoc.id,
+    //   accessToken,
+    //   refreshToken
+    // })
+  
+  }
+)
 
 function createAccessToken (userId) {
   return jwt.sign({
