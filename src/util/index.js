@@ -19,8 +19,9 @@ function withTransaction(aFunction) {
     let result;
     await mongoose.connection.transaction(async(session) => {
       result = await aFunction(req, res, session);
+      //session object is returned by mongoose.connection.transaction
       return result;
-    })
+    }) 
 
     return result;
   }

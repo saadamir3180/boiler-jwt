@@ -21,6 +21,8 @@ async function StartServer() {
         res.status(err.statusCode || 500)
         .send({ error: err.message });
     });
+    
+    // this is a middleware that catches any error thrown in the application and logs it to the console. It also sends a response to the client with the error message and status code.
 
     app.listen(port, () => {
         logger.info(`Server running on http://localhost:${port}`);

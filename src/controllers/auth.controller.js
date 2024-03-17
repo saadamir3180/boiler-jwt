@@ -7,6 +7,8 @@ const {HttpError} = require('../error');
 
 const signUp = errorHandler(withTransaction(
   async (req, res, session) => {
+    //passed a session for successful transection i.e either rollback or commit 
+    // by default commit 
 
     // Create a user document
     const userDoc = model.User({
@@ -48,7 +50,27 @@ const signUp = errorHandler(withTransaction(
   }
 ))
 
+const login = errorHandler(withTransaction(
+  async (req, res) => {
+    // Find the user in the database
+    const userDoc = await model.User
+    .findOne({username: req.body.username})
+    .select('+password')
+    .exec();
+  
+    // throw new HttpError if the user exists and the password is correct
+    if (!userDoc) {
+      throw new HttpError(400, 'Invalid username or password');
+    }
+    await verifyPassword(userDoc.password, req.body.password);
+      
 
+    const refreshTokenDoc = model.RefreshToken({
+      user: userDoc.id
+    })
+    await refreshTokenDoc.save({session})
+  }
+))
 
 function createAccessToken (userId) {
   return jwt.sign({
@@ -67,6 +89,16 @@ function createRefreshToken(userId, refreshTokenId){
   })  
 }
 
+const verifyPassword = async (hash, raw) => {
+  if (await argon2.verify(hash, raw)) {
+    //matches
+  }
+  else{    
+    throw new HttpError(400, 'Invalid username or password');
+  }
+}
+
 module.exports = {
-    signUp
+    signUp,
+    login
 };
