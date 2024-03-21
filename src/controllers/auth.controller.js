@@ -95,7 +95,30 @@ const login = errorHandler(withTransaction(
   }
 ))
 
+const newRefreshToken = errorHandler(withTransaction( async (req, res, session) => {
 
+  const currentRefreshToken = validateRefreshToken(req.body.refreshToken)
+  const refreshTokenDoc = await model.RefreshToken({
+    owner: currentRefreshToken.userId,
+  })
+
+  await refreshTokenDoc.save({session})
+
+  
+    const accessToken = createAccessToken(currentRefreshToken.userId)
+    const refreshToken = createRefreshToken(currentRefreshToken.userId, refreshTokenDoc.id)
+    
+
+    
+    return {
+        id: currentRefreshToken.userId,
+        accessToken,
+        refreshToken
+      }
+
+
+
+}))
 
 function createAccessToken (userId) {
   return jwt.sign({
@@ -135,5 +158,5 @@ const validateRefreshToken = (refreshToken) => {
 module.exports = {
     signUp,
     login, 
-    // newRefreshToken
+    newRefreshToken
 };

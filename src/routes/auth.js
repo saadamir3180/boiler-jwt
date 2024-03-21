@@ -9,7 +9,7 @@ router.post('/login', controllers.auth.login);
 router.post('/signup', controllers.auth.signUp);
 router.post('/logout', tmp);
 router.post('/accessToken', tmp);
-// router.post('/refreshToken', controllers.auth.newRefreshToken);
+router.post('/refreshToken', controllers.auth.newRefreshToken);
 
 
 module.exports = router;
