@@ -1,7 +1,26 @@
-POST http://localhost:3000/api/auth/signup 
+POST http://localhost:3000/api/auth/login
 content-type: application/json
 
 {
-    "username": "SAAD Amir",
+    "username": "SAAD AM",
     "password": "123saad"
+}
+
+###
+
+POST http://localhost:3000/api/auth/signup
+content-type: application/json
+
+{
+    "username": "SAAD AM",
+    "password": "123saad"
+}
+
+###
+
+POST http://localhost:3000/api/auth/refreshToken
+content-type: application/json
+
+{
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWZiODgzYmI4ZjhhYzIwNGVmNThlMzkiLCJ0b2tlbklkIjoiNjVmYjg4M2JiOGY4YWMyMDRlZjU4ZTNhIiwiaWF0IjoxNzEwOTgzMjI3LCJleHAiOjE3MTM1NzUyMjd9.rKHZAfYXoC1N2c-JFIvDzxe7XhCDpocZxe9NYG_L9HQ"
 }

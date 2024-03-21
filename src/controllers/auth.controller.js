@@ -26,16 +26,18 @@ const signUp = errorHandler(withTransaction(
     await userDoc.save({session})
     await refreshTokenDoc.save({session})
   
-    // Create access token and refresh token
+    // Create access token and refresh token for client
     const accessToken = createAccessToken(userDoc.id)
     const refreshToken = createRefreshToken(userDoc.id, refreshTokenDoc.id)
   
 
     // throw new HttpError(400, 'Invalid username or password');
+
    //for testing only
    //confirms incase of any error thrown, the transaction will be rolled back
 
     // Send the access token and refresh token to the client
+    
     return {
         id: userDoc.id,
         accessToken,
@@ -51,7 +53,7 @@ const signUp = errorHandler(withTransaction(
 ))
 
 const login = errorHandler(withTransaction(
-  async (req, res) => {
+  async (req, res, session) => {
     // Find the user in the database
     const userDoc = await model.User
     .findOne({username: req.body.username})
@@ -68,9 +70,32 @@ const login = errorHandler(withTransaction(
     const refreshTokenDoc = model.RefreshToken({
       user: userDoc.id
     })
+
     await refreshTokenDoc.save({session})
+    
+    // Create access token and refresh token for client
+    const accessToken = createAccessToken(userDoc.id)
+    const refreshToken = createRefreshToken(userDoc.id, refreshTokenDoc.id)
+  
+
+    // throw new HttpError(400, 'Invalid username or password');
+
+   //for testing only
+   //confirms incase of any error thrown, the transaction will be rolled back
+
+    // Send the access token and refresh token to the client
+    
+    return {
+        id: userDoc.id,
+        accessToken,
+        refreshToken
+      }
+
+
   }
 ))
+
+
 
 function createAccessToken (userId) {
   return jwt.sign({
@@ -84,7 +109,7 @@ function createRefreshToken(userId, refreshTokenId){
   return jwt.sign({
     userId: userId,
     tokenId: refreshTokenId
-  }, process.env.ACCESS_TOKEN_SECRET, {
+  }, process.env.REFRESH_TOKEN_SECRET, {
     expiresIn: '30d'  
   })  
 }
@@ -98,7 +123,17 @@ const verifyPassword = async (hash, raw) => {
   }
 }
 
+const validateRefreshToken = (refreshToken) => {
+  try {
+    return jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
+  } catch (error) {
+    throw new HttpError(401, 'Unauthorized')
+  }
+
+}
+
 module.exports = {
     signUp,
-    login
+    login, 
+    // newRefreshToken
 };
