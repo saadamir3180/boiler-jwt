@@ -121,6 +121,21 @@ const newRefreshToken = errorHandler(withTransaction(async (req, res, session) =
   };
 }));
 
+const newAccessToken = errorHandler(
+  async (req, res) => {
+    const refreshToken = await validateRefreshToken(req.body.refreshToken);
+
+    // Generate a new access token
+    const accessToken = createAccessToken(refreshToken.userId);
+
+    return {
+      id: refreshToken.userId,
+      accessToken,
+      refreshToken: req.body.refreshToken
+    };
+  }
+)
+
 function createAccessToken (userId) {
   return jwt.sign({
     userId: userId,
@@ -170,5 +185,6 @@ const validateRefreshToken = (refreshToken) => {
 module.exports = {
     signUp,
     login, 
-    newRefreshToken
+    newRefreshToken,
+    newAccessToken
 };

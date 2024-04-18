@@ -2,7 +2,7 @@ POST http://localhost:3000/api/auth/login
 content-type: application/json
 
 {
-    "username": "SAAD AM",
+    "username": "SAAD AMIR",
     "password": "123saad"
 }
 
@@ -12,7 +12,7 @@ POST http://localhost:3000/api/auth/signup
 content-type: application/json
 
 {
-    "username": "SAAD AM",
+    "username": "SAAD AMIR",
     "password": "123saad"
 }
 
@@ -22,5 +22,14 @@ POST http://localhost:3000/api/auth/refreshToken
 content-type: application/json
 
 {
-    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWZiODgzYmI4ZjhhYzIwNGVmNThlMzkiLCJ0b2tlbklkIjoiNjVmYjg4M2JiOGY4YWMyMDRlZjU4ZTNhIiwiaWF0IjoxNzEwOTgzMjI3LCJleHAiOjE3MTM1NzUyMjd9.rKHZAfYXoC1N2c-JFIvDzxe7XhCDpocZxe9NYG_L9HQ"
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjIwYjc4NWE4NDQ1YzAzZDMyMjE0N2IiLCJ0b2tlbklkIjoiNjYyMGI3ODVhODQ0NWMwM2QzMjIxNDdjIiwiaWF0IjoxNzEzNDIwMTY1LCJleHAiOjE3MTYwMTIxNjV9.-gXIDqB0rN5lc1VnquRysatdUVmHaslrNgz1QHjwFfw"
+}
+
+###
+
+POST http://localhost:3000/api/auth/accessToken
+content-type: application/json
+
+{
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjIwYjEzNmIyNWE3ODlmNTUwMzY1MTIiLCJ0b2tlbklkIjoiNjYyMGRkYjlhNTNhZGM1ZmFkODMwNGEyIiwiaWF0IjoxNzEzNDI5OTQ2LCJleHAiOjE3MTYwMjE5NDZ9.rh6pL_XBWZjtITK7-wDhDYGa1dQUxrppHEx0FpXV4l8"
 }
