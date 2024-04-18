@@ -95,30 +95,31 @@ const login = errorHandler(withTransaction(
   }
 ))
 
-const newRefreshToken = errorHandler(withTransaction( async (req, res, session) => {
-
-  const currentRefreshToken = validateRefreshToken(req.body.refreshToken)
+const newRefreshToken = errorHandler(withTransaction(async (req, res, session) => {
+  const currentRefreshToken = await validateRefreshToken(req.body.refreshToken);
   const refreshTokenDoc = await model.RefreshToken({
     owner: currentRefreshToken.userId,
-  })
+  });
 
-  await refreshTokenDoc.save({session})
+  // Delete the previous refresh token
+  const deleteResult = await model.RefreshToken.deleteOne({ _id: currentRefreshToken.tokenId }, { session });
+  if (deleteResult.deletedCount !== 1) {
+    throw new HttpError("Failed to delete previous refresh token");
+  }
 
-  
-    const accessToken = createAccessToken(currentRefreshToken.userId)
-    const refreshToken = createRefreshToken(currentRefreshToken.userId, refreshTokenDoc.id)
-    
+  // Create a new refresh token
+  await refreshTokenDoc.save({ session });
 
-    
-    return {
-        id: currentRefreshToken.userId,
-        accessToken,
-        refreshToken
-      }
+  // Generate new access and refresh tokens
+  const accessToken = createAccessToken(currentRefreshToken.userId);
+  const refreshToken = createRefreshToken(currentRefreshToken.userId, refreshTokenDoc.id);
 
-
-
-}))
+  return {
+    id: currentRefreshToken.userId,
+    accessToken,
+    refreshToken
+  };
+}));
 
 function createAccessToken (userId) {
   return jwt.sign({
@@ -147,9 +148,20 @@ const verifyPassword = async (hash, raw) => {
 }
 
 const validateRefreshToken = (refreshToken) => {
-  try {
-    return jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
-  } catch (error) {
+  const decodeToken = () =>{
+    try {
+      return jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
+    } catch (error) {
+      throw new HttpError(401, 'Unauthorized')
+    }
+  }
+
+  const decodedToken = decodeToken()
+  const tokenExists = model.RefreshToken.exists({id: decodedToken.tokenId})
+  if(tokenExists){
+    return decodedToken;
+  }
+  else{
     throw new HttpError(401, 'Unauthorized')
   }
 
