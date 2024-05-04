@@ -4,7 +4,8 @@ const middlewares = require('../middleware');
 const router = express.Router();
 
 
-router.get('/me', middlewares.verifyAccessToken , controllers.auth.me);
+router.get('/me', middlewares.verifyAccessToken , controllers.users.me);
+
 
 
 module.exports = router;
