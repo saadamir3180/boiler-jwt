@@ -2,6 +2,7 @@ const express = require('express');
 const logger = require('./logger');
 const app = express();
 const routes = require('./routes');
+const cors = require('cors')
 const connectToDatabase = require('./database');
 const port = process.env.PORT || 3000;
 
@@ -9,9 +10,10 @@ const port = process.env.PORT || 3000;
 
 async function StartServer() {
 
+
     
     await connectToDatabase();
-
+    app.use(cors());
     app.use(express.json());
 
     app.use('/api', routes);

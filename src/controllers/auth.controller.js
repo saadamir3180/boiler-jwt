@@ -10,15 +10,26 @@ const signUp = errorHandler(withTransaction(
     //passed a session for successful transection i.e either rollback or commit 
     // by default commit 
 
+    const { username, password, role } = req.body;
+
+    const existingUser = await model.User.findOne({ username: req.body.username }).exec();
+    if (existingUser) {
+      throw new HttpError(400, 'Username is already taken');
+    }
+    // Validate role if provided
+    if (role && !['user', 'manager'].includes(role)) {
+      throw new HttpError(400, 'Invalid role');
+    }
     // Create a user document
     const userDoc = model.User({
-      username: req.body.username,
-      password: await argon2.hash(req.body.password)
-    })
+      username: username,
+      password: await argon2.hash(password),
+      role: role || 'user', // Set default role to 'user' if not provided
+    });
     // Create a refresh token document
     const refreshTokenDoc = model.RefreshToken({
       user: userDoc.id
-    })
+    });
 
 
   
@@ -156,7 +167,7 @@ function createAccessToken (userId) {
   return jwt.sign({
     userId: userId,
   }, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: '10m'  
+    expiresIn: '1d'  
   })  
 }
 

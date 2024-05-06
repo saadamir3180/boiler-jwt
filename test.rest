@@ -2,8 +2,8 @@ POST http://localhost:3000/api/auth/login
 content-type: application/json
 
 {
-    "username": "saad",
-    "password": "saad"
+    "username": "ali",
+    "password": "ali"
 }
 
 ###
@@ -12,8 +12,8 @@ POST http://localhost:3000/api/auth/signup
 content-type: application/json
 
 {
-    "username": "SAAD AMIR",
-    "password": "123saad"
+    "username": "ali",
+    "password": "ali"
 }
 
 ###
@@ -41,15 +41,13 @@ POST http://localhost:3000/api/auth/logout
 content-type: application/json
 
 {
-    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjIwZTg3Njk2ZmJiOWViYmM0YjBmMzUiLCJ0b2tlbklkIjoiNjYyMGU4NzY5NmZiYjllYmJjNGIwZjM2IiwiaWF0IjoxNzEzNDMyNjk1LCJleHAiOjE3MTYwMjQ2OTV9.wgZde_n4ABaElznWulssIj28bl9NAu62ouk2_WbyHFU"
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjM3Yjg3N2Q0NjNjOTQ3YTJiOTU4OGIiLCJ0b2tlbklkIjoiNjYzN2I4NzdkNDYzYzk0N2EyYjk1ODhjIiwiaWF0IjoxNzE0OTI3NzM1LCJleHAiOjE3MTc1MTk3MzV9.6V5plG72edMmRyVEfSEjVH-jMbkW2Hg_l7JoyIMzcgM"
 }
 
 ###
 
 GET http://localhost:3000/api/users/me
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjM2YWM1NDFjNDQ4ODZkNzBmYzk5OTQiLCJ0b2tlbklkIjoiNjYzNmI1Y2YwMDliMWZkYjUwYmFiMGNlIiwiaWF0IjoxNzE0ODYxNTE5LCJleHAiOjE3MTc0NTM1MTl9.6DdTCnOPWTZ60tzRrv4kcdLZz7yRBbyD-t7n9pMPUow
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjM3Yjk3ZjRkODAzYmM5ZDQwMjIwNWQiLCJpYXQiOjE3MTQ5MzE2NjgsImV4cCI6MTcxNDkzMjI2OH0.VM75gGruC-TGE72VPTnNIQAVnZUwMLXQnpgbVYi4Om0
 
-{
-    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjM2YWM1NDFjNDQ4ODZkNzBmYzk5OTQiLCJ0b2tlbklkIjoiNjYzNmI1Y2YwMDliMWZkYjUwYmFiMGNlIiwiaWF0IjoxNzE0ODYxNTE5LCJleHAiOjE3MTc0NTM1MTl9.6DdTCnOPWTZ60tzRrv4kcdLZz7yRBbyD-t7n9pMPUow"
-}
+

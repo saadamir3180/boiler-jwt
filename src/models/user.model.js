@@ -12,7 +12,13 @@ const userSchema = new Schema({
     required: true,
     select: false,
   },
+  role: {
+    type: String,
+    enum: ['user', 'manager'],
+    default: 'user', // Set default role to 'user'
+  },
 });
+
 
 const User = model("User", userSchema);
 

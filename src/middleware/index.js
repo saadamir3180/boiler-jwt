@@ -9,7 +9,7 @@ const verifyAccessToken = errorHandler((req, res, next) => {
 
 
     if(!token){
-        throw HttpError(401, 'Unauthorized');
+        throw new HttpError(401, 'Unauthorized');
     }
 
     try{
@@ -17,7 +17,7 @@ const verifyAccessToken = errorHandler((req, res, next) => {
         req.userId = deceodedToken.userId;
         next();
     }catch(err){
-        throw HttpError(401, 'Unauthorized');
+        throw new HttpError(401, 'Unauthorized');
     }
 })
 
